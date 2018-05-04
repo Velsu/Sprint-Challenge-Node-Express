@@ -64,13 +64,22 @@ router.put("/:id", (req, res) => {
     updatedAction.description &&
     updatedAction.description.length <= 128
   ) {
-    actionDb
-      .update(id, updatedAction)
+    projectDb
+      .get(updatedAction.project_id)
       .then(response => {
-        res.status(200).json(response);
+        actionDb
+          .update(id, updatedAction)
+          .then(response => {
+            res.status(200).json(response);
+          })
+          .catch(error => {
+            res.status(500).json({ error: "There was a server error" });
+          });
       })
       .catch(error => {
-        res.status(500).json({ error: "There was a server error" });
+        res
+          .status(500)
+          .json({ error: "Project id must link to valid project in database" });
       });
   } else {
     res
