@@ -90,11 +90,12 @@ router.put("/:id", (req, res) => {
 
 router.delete("/:id", (req, res) => {
   const id = req.params.id;
+  const message = "Action removed";
 
   actionDb
     .remove(id)
     .then(response => {
-      res.status(204).json({ message: "Action removed" });
+      res.status(204).json({ message });
     })
     .catch(error => {
       res.status(500).json({ error: "Error occured" });
