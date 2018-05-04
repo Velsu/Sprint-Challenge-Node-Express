@@ -62,7 +62,11 @@ router.post("/", (req, res) => {
 router.put("/:id", (req, res) => {
   const id = req.params.id;
   const updatedProject = req.body;
-  if (updatedProject.name && updatedProject.description) {
+  if (
+    updatedProject.name &&
+    updatedProject.name.length <= 128 &&
+    (updatedProject.description && updatedProject.description.length <= 128)
+  ) {
     projectDb
       .update(id, updatedProject)
       .then(response => {
@@ -81,7 +85,7 @@ router.delete("/:id", (req, res) => {
   projectDb
     .remove(id)
     .then(response => {
-      res.status(204).json(response);
+      res.status(204).json({ message: "Project removed" });
     })
     .catch(error => {
       res.status(500).json({ error: "Error occured" });
